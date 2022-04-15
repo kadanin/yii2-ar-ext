@@ -5,7 +5,7 @@ namespace Kadanin\Yii2ArExt\Db;
 /**
  * @method array|null alone($db = null)
  */
-class Query extends \yii\db\Query
+class Query extends \yii\db\Query implements ExtendedQueryInterface
 {
     use QueryTrait;
 
@@ -27,20 +27,24 @@ class Query extends \yii\db\Query
 
         $tableName = '';
         // if the first entry in "from" is an alias-table name-pair return it directly
-        /** @noinspection LoopWhichDoesNotLoopInspection */
         foreach ($this->from as $alias => $tableName) {
-            if (is_string($alias)) {
+            if (\is_string($alias)) {
                 return [$tableName, $alias];
             }
             break;
         }
 
-        if (preg_match('/^(.*?)\s+({{\w+}}|\w+)$/', $tableName, $matches)) {
+        if (\preg_match('/^(.*?)\s+({{\w+}}|\w+)$/', $tableName, $matches)) {
             $alias = $matches[2];
         } else {
             $alias = $tableName;
         }
 
         return [$tableName, $alias];
+    }
+
+    protected function andOnWhere($condition, $params = []): self
+    {
+        return $this->andWhere($condition, $params);
     }
 }

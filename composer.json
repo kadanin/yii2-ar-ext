@@ -1,29 +1,30 @@
 {
-    "name":              "kadanin/yii2-ar-ext",
-    "type":              "library",
-    "authors":           [
-        {
-            "name": "Kadanin"
-        }
-    ],
-    "minimum-stability": "stable",
-    "require":           {
-        "yiisoft/yii2": "^2.0"
-    },
-    "autoload":          {
-        "psr-4": {
-            "Kadanin\\Yii2ArExt\\": "src/"
-        }
-    },
-    "repositories":      [
-        {
-            "type": "composer",
-            "url":  "https://asset-packagist.org"
-        }
-    ],
-    "config": {
-        "allow-plugins": {
-            "yiisoft/yii2-composer": false
-        }
+  "name":              "kadanin/yii2-ar-ext",
+  "type":              "library",
+  "authors":           [
+    {
+      "name": "Kadanin"
     }
+  ],
+  "minimum-stability": "stable",
+  "require":           {
+    "php": ">=7.4",
+    "yiisoft/yii2": "^2.0"
+  },
+  "autoload":          {
+    "psr-4": {
+      "Kadanin\\Yii2ArExt\\": "src/"
+    }
+  },
+  "repositories":      [
+    {
+      "type": "composer",
+      "url":  "https://asset-packagist.org"
+    }
+  ],
+  "config":            {
+    "allow-plugins": {
+      "yiisoft/yii2-composer": false
+    }
+  }
 }
