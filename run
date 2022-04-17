@@ -1,0 +1,30 @@
+#!/usr/bin/env php
+<?php
+
+use Kadanin\Yii2ArExt\Db\Test;
+
+require __DIR__ . '/vendor/autoload.php';
+require __DIR__ . '/vendor/yiisoft/yii2/Yii.php';
+
+$application = new \yii\console\Application(['id' => 'FFFFFFFFFFUUUUUUUUU', 'basePath' => __DIR__, 'controllerNamespace' => '']);
+$exitCode    = $application->run();
+exit($exitCode);
+
+//(new class {
+//    public function run(): void
+//    {
+//        $this->o('BEGIN');
+//        $this->o(Test::find()->rawSql());
+//        $this->o('END');
+//    }
+//
+//    private function o(string $string): void
+//    {
+//        $this->stdout($string . PHP_EOL);
+//    }
+//
+//    private function stdout(string $string): void
+//    {
+//        fwrite(\STDOUT, $string);
+//    }
+//})->run();

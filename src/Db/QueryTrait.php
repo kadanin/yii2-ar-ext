@@ -127,6 +127,33 @@ trait QueryTrait
         return $this->andOnWhere($args);
     }
 
+
+    /**
+     * Пропускаем `createCommand()`
+     *
+     * @param Connection|string|null $db the DB connection used to create the DB command.
+     *
+     * @return string
+     */
+    public function rawSql($db = null): string
+    {
+        return $this->createCommand($db)->rawSql;
+    }
+
+    /**
+     * Как обычный `count()`, только с конверсией и типизацией
+     *
+     * @param string                 $q
+     * @param Connection|string|null $db
+     * @return int
+     *
+     * @see count()
+     */
+    public function countInt(string $q = '*', $db = null): int
+    {
+        return (int)$this->count($q, $db);
+    }
+
     /**
      * @param string $column
      *
@@ -139,5 +166,5 @@ trait QueryTrait
 
     abstract protected function andOnWhere($condition, array $params = []): self;
 
-    abstract protected function getTableNameAndAlias(): array;
+    abstract protected function getTableNameAndAlias();
 }
