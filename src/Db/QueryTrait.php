@@ -2,6 +2,11 @@
 
 namespace Kadanin\Yii2ArExt\Db;
 
+use yii\db\Connection;
+
+use function func_get_args;
+use function is_array;
+
 trait QueryTrait
 {
     public function gainAlias(): ?string
@@ -29,7 +34,7 @@ trait QueryTrait
     {
         if (null === $value) {
             $operator = 'is';
-        } elseif (\is_array($value)) {
+        } elseif (is_array($value)) {
             $operator = 'in';
         } else {
             $operator = '=';
@@ -48,7 +53,7 @@ trait QueryTrait
     {
         if (null === $value) {
             $operator = 'is not';
-        } elseif (\is_array($value)) {
+        } elseif (is_array($value)) {
             $operator = 'not in';
         } else {
             $operator = '<>';
@@ -122,7 +127,7 @@ trait QueryTrait
      */
     public function op(string $operator, string $column, ...$values): self
     {
-        $args = \func_get_args();
+        $args = func_get_args();
         $args[1] = $this->columnAlias($args[1]);
         return $this->andOnWhere($args);
     }
@@ -131,7 +136,7 @@ trait QueryTrait
     /**
      * Пропускаем `createCommand()`
      *
-     * @param Connection|string|null $db the DB connection used to create the DB command.
+     * @param \yii\db\Connection|string|null $db the DB connection used to create the DB command.
      *
      * @return string
      */
@@ -161,7 +166,7 @@ trait QueryTrait
      */
     public function columnAlias(string $column): QueryColumnExpression
     {
-        return new QueryColumnExpression($this, $column);
+        return new QueryColumnExpression('', [], ['extendedQuery' => $this, 'column' => $column]);
     }
 
     abstract protected function andOnWhere($condition, array $params = []): self;

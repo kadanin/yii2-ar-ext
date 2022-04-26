@@ -11,6 +11,10 @@
     "php": ">=7.4",
     "yiisoft/yii2": "^2.0"
   },
+  "require-dev":           {
+    "roave/infection-static-analysis-plugin": "^1.16",
+    "roave/security-advisories": "dev-master"
+  },
   "autoload":          {
     "psr-4": {
       "Kadanin\\Yii2ArExt\\": "src/"

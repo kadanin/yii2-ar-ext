@@ -2,23 +2,12 @@
 
 namespace Kadanin\Yii2ArExt\Db;
 
-use yii\db\ExpressionInterface;
+use yii\db\Expression;
 
-class QueryColumnExpression implements ExpressionInterface
+final class QueryColumnExpression extends Expression
 {
-
-    private ExtendedQueryInterface $extendedQuery;
-    private string                 $column;
-
-    /**
-     * @param ExtendedQueryInterface $extendedQuery
-     * @param string                 $column
-     */
-    public function __construct(ExtendedQueryInterface $extendedQuery, string $column)
-    {
-        $this->extendedQuery = $extendedQuery;
-        $this->column        = $column;
-    }
+    public ExtendedQueryInterface $extendedQuery;
+    public string $column;
 
     /**
      * String magic method.
