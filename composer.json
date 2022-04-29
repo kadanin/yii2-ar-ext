@@ -28,7 +28,8 @@
   ],
   "config":            {
     "allow-plugins": {
-      "yiisoft/yii2-composer": false
+      "yiisoft/yii2-composer": false,
+      "infection/extension-installer": true
     }
   }
 }
