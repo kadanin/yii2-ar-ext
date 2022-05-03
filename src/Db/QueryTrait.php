@@ -157,7 +157,7 @@ trait QueryTrait
      */
     public function op(string $operator, string $column, ...$values): self
     {
-        $args = \func_get_args();
+        $args    = \func_get_args();
         $args[1] = $this->columnAlias($args[1]);
         return $this->andOnWhere($args);
     }
@@ -180,6 +180,7 @@ trait QueryTrait
      *
      * @param string                 $q
      * @param Connection|string|null $db
+     *
      * @return int
      *
      * @see count()
@@ -187,6 +188,67 @@ trait QueryTrait
     public function countInt(string $q = '*', $db = null): int
     {
         return (int)$this->count($q, $db);
+    }
+
+    /**
+     * Analog `addOrderBy()` with deferred aliases
+     *
+     * @param array $columns
+     *
+     * @return $this
+     *
+     * @see \yii\db\QueryTrait::addOrderBy()
+     */
+    public function order(array $columns): self
+    {
+        $result = [];
+
+        foreach ($columns as $column => $direction) {
+            $result[] = $this->orderByAlias($column, $direction);
+        }
+
+        $this->addOrderBy($result);
+
+        return $this;
+    }
+
+    /**
+     * Analog `addGroupBy()` with deferred aliases
+     *
+     * @param array $columns
+     *
+     * @return $this
+     *
+     * @see \yii\db\Query::addGroupBy()
+     */
+    public function group(array $columns): self
+    {
+        $result = [];
+
+        foreach ($columns as $column) {
+            $result[] = $this->columnAlias($column);
+        }
+
+        $this->addGroupBy($result);
+
+        return $this;
+    }
+
+    /**
+     * Wrapping column with alias expression
+     *
+     * @param string $column
+     * @param int    $direction
+     *
+     * @return DeferredOrderByAliasExpression
+     */
+    private function orderByAlias(string $column, int $direction): DeferredOrderByAliasExpression
+    {
+        return new DeferredOrderByAliasExpression('', [], [
+            'extendedQuery' => $this,
+            'column'        => $column,
+            'direction'     => $direction,
+        ]);
     }
 
     /**

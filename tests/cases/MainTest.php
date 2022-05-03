@@ -12,7 +12,10 @@ class MainTest extends TestCase
 
     public function testMain(): void
     {
-        static::assertEquals('SELECT * FROM `test` `t` WHERE `t`.`id` = 1', Test::find()->byID(1)->alias('t')->rawSql());
+        static::assertEquals(
+            'SELECT * FROM `test` `t` WHERE `t`.`id` = 1 ORDER BY `t`.`text` DESC',
+            Test::find()->alias('a')->byID(1)->order(['text' => \SORT_DESC])->alias('t')->rawSql()
+        );
         static::assertEquals(['id' => 1, 'text' => 'text1'], Test::find()->orderBy(['id' => \SORT_ASC])->asArray()->alone());
         static::assertEquals([['id' => 2, 'text' => 'text2']], Test::find()->byID(2)->asArray()->all());
     }
