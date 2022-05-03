@@ -14,9 +14,21 @@ class ActiveQuery extends \yii\db\ActiveQuery implements ExtendedQueryInterface
 {
     use QueryTrait;
 
-    protected function andOnWhere($condition, $params = []): self
+
+    /**
+     * @inheritDoc
+     */
+    public function orOnCondition($condition, $params = []): self
     {
-        return $this->andOnCondition($condition, $params);
+        if ($this->on === null) {
+            $this->on = $condition;
+        } elseif (\is_array($this->on) && (0 === \strcasecmp($this->on[0] ?? '', 'or'))) {
+            $this->on[] = $condition;
+        } else {
+            $this->on = ['or', $this->on, $condition];
+        }
+        $this->addParams($params);
+        return $this;
     }
 
     /**
@@ -26,7 +38,7 @@ class ActiveQuery extends \yii\db\ActiveQuery implements ExtendedQueryInterface
     {
         if ($this->on === null) {
             $this->on = $condition;
-        } elseif (\is_array($this->on) && \strcasecmp($this->on[0] ?? '', 'and') === 0) {
+        } elseif (\is_array($this->on) && (0 === \strcasecmp($this->on[0] ?? '', 'and'))) {
             $this->on[] = $condition;
         } else {
             $this->on = ['and', $this->on, $condition];
@@ -38,16 +50,8 @@ class ActiveQuery extends \yii\db\ActiveQuery implements ExtendedQueryInterface
     /**
      * @inheritDoc
      */
-    public function orOnCondition($condition, $params = []): self
+    protected function andOnWhere($condition, $params = []): self
     {
-        if ($this->on === null) {
-            $this->on = $condition;
-        } elseif (\is_array($this->on) && \strcasecmp($this->on[0] ?? '', 'or') === 0) {
-            $this->on[] = $condition;
-        } else {
-            $this->on = ['or', $this->on, $condition];
-        }
-        $this->addParams($params);
-        return $this;
+        return $this->andOnCondition($condition, $params);
     }
 }

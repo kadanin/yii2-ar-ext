@@ -13,6 +13,11 @@ use yii\db\Connection;
  */
 trait QueryTrait
 {
+    /**
+     * Method allows to take current query main table alias (if there is)
+     *
+     * @return string|null
+     */
     public function getAlias(): ?string
     {
         $tableNameAndAlias = $this->getTableNameAndAlias();
@@ -20,6 +25,8 @@ trait QueryTrait
     }
 
     /**
+     * Methods limits query to 1 record before calling `one()`
+     *
      * @return ActiveRecord|array|null
      */
     public function alone()
@@ -28,6 +35,9 @@ trait QueryTrait
     }
 
     /**
+     * Method "equal" builds `IS NULL`, `IN` or `=` condition,
+     * depends on the value(`null`, array, or else)
+     *
      * @param string $column
      * @param mixed  $value
      *
@@ -47,6 +57,9 @@ trait QueryTrait
     }
 
     /**
+     * Method "not equal" builds `IS NOT NULL`, `NOT IN` or `<>` condition,
+     * depends on the value(`null`, array, or else)
+     *
      * @param string $column
      * @param mixed  $value
      *
@@ -66,6 +79,8 @@ trait QueryTrait
     }
 
     /**
+     * Method "greater than" builds `>` condition
+     *
      * @param string $column
      * @param mixed  $value
      *
@@ -77,6 +92,8 @@ trait QueryTrait
     }
 
     /**
+     * Method "greater than or equal" builds `>=` condition
+     *
      * @param string $column
      * @param mixed  $value
      *
@@ -88,6 +105,8 @@ trait QueryTrait
     }
 
     /**
+     * Method "lesser than" builds `<` condition
+     *
      * @param string $column
      * @param mixed  $value
      *
@@ -99,6 +118,8 @@ trait QueryTrait
     }
 
     /**
+     * Method "lesser than or equal" builds `<=` condition
+     *
      * @param string $column
      * @param mixed  $value
      *
@@ -110,6 +131,8 @@ trait QueryTrait
     }
 
     /**
+     * Method "between" obviously builds `between` condition
+     *
      * @param string $column
      * @param mixed  $valueBegin
      * @param mixed  $valueEnd
@@ -122,6 +145,10 @@ trait QueryTrait
     }
 
     /**
+     * This "operator" method builds standard Yii2 binary operators.
+     * Multiple values used to pass additional parameters,
+     * for example in Yii2 query `like` operator: `['like', 'column', '%value%', false]`
+     *
      * @param string $operator
      * @param string $column
      * @param mixed  ...$values
@@ -137,7 +164,7 @@ trait QueryTrait
 
 
     /**
-     * Пропускаем `createCommand()`
+     * Skipping `createCommand()`
      *
      * @param \yii\db\Connection|string|null $db the DB connection used to create the DB command.
      *
@@ -149,7 +176,7 @@ trait QueryTrait
     }
 
     /**
-     * Как обычный `count()`, только с конверсией и типизацией
+     * Like normal `count()`, only with conversion
      *
      * @param string                 $q
      * @param Connection|string|null $db
@@ -163,16 +190,31 @@ trait QueryTrait
     }
 
     /**
+     * Wrapping column with alias expression
+     *
      * @param string $column
      *
-     * @return QueryColumnExpression
+     * @return DeferredColumnAliasExpression
      */
-    public function columnAlias(string $column): QueryColumnExpression
+    public function columnAlias(string $column): DeferredColumnAliasExpression
     {
-        return new QueryColumnExpression('', [], ['extendedQuery' => $this, 'column' => $column]);
+        return new DeferredColumnAliasExpression('', [], ['extendedQuery' => $this, 'column' => $column]);
     }
 
+    /**
+     * Method uses `andWhere()` or `andOnCondition()` depends on query class
+     *
+     * @param       $condition
+     * @param array $params
+     *
+     * @return $this
+     */
     abstract protected function andOnWhere($condition, array $params = []): self;
 
+    /**
+     * Obviously get table name and alias, if exists
+     *
+     * @return mixed
+     */
     abstract protected function getTableNameAndAlias();
 }

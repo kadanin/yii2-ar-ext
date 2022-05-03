@@ -4,7 +4,10 @@ namespace Kadanin\Yii2ArExt\Db;
 
 use yii\db\Expression;
 
-final class QueryColumnExpression extends Expression
+/**
+ * Expression adds to column the latest alias in query
+ */
+final class DeferredColumnAliasExpression extends Expression
 {
     public ExtendedQueryInterface $extendedQuery;
     public string $column;

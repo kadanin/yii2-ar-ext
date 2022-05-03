@@ -43,6 +43,9 @@ class Query extends \yii\db\Query implements ExtendedQueryInterface
         return [$tableName, $alias];
     }
 
+    /**
+     * @inheritDoc
+     */
     protected function andOnWhere($condition, $params = []): self
     {
         return $this->andWhere($condition, $params);
