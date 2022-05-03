@@ -6,7 +6,7 @@ use yii\db\Connection;
 
 trait QueryTrait
 {
-    public function gainAlias(): ?string
+    public function getAlias(): ?string
     {
         $tableNameAndAlias = $this->getTableNameAndAlias();
 
