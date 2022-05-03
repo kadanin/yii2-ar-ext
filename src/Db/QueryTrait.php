@@ -14,7 +14,7 @@ trait QueryTrait
     }
 
     /**
-     * @return array|null|ActiveRecord
+     * @return ActiveRecord|array|null
      */
     public function alone()
     {
