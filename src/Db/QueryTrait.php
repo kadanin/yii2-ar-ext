@@ -4,12 +4,18 @@ namespace Kadanin\Yii2ArExt\Db;
 
 use yii\db\Connection;
 
+/**
+ * The trait allows you to use operators
+ * that will be automatically supplemented with an alias.
+ * Example, when `Test` is Active Record with table `test`:
+ * expression `(new Test)->eq('column', 42)->alias('t')`
+ * will build <code>SELECT * FROM `test` `t` WHERE `t.column` = 42</code> query
+ */
 trait QueryTrait
 {
     public function getAlias(): ?string
     {
         $tableNameAndAlias = $this->getTableNameAndAlias();
-
         return ($tableNameAndAlias[0] === $tableNameAndAlias[1]) ? null : $tableNameAndAlias[1];
     }
 
