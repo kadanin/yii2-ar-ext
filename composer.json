@@ -13,11 +13,13 @@
   },
   "require-dev":           {
     "roave/infection-static-analysis-plugin": "^1.16",
-    "roave/security-advisories": "dev-master"
+    "roave/security-advisories": "dev-master",
+    "phpunit/phpunit": "^9.5"
   },
   "autoload":          {
     "psr-4": {
-      "Kadanin\\Yii2ArExt\\": "src/"
+      "Kadanin\\Yii2ArExt\\": "src/",
+      "tests\\": "tests/"
     }
   },
   "repositories":      [

@@ -18,6 +18,6 @@ final class DeferredColumnAliasExpression extends Expression
      */
     public function __toString()
     {
-        return ($alias = $this->extendedQuery->getAlias()) ? "$alias.{$this->column}" : $this->column;
+        return ($alias = $this->extendedQuery->getAlias()) ? "[[$alias.{$this->column}]]" : $this->column;
     }
 }
