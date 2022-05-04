@@ -21,8 +21,6 @@ final class DeferredOrderByAliasExpression extends Expression
     {
         $direction = (\SORT_DESC === $this->direction ? ' DESC' : '');
 
-        $column = ($alias = $this->extendedQuery->getAlias()) ? "[[$alias.{$this->column}]]" : $this->column;
-
-        return "{$column}{$direction}";
+        return (DeferredColumnAliasExpression::make($this->extendedQuery, $this->column)) . $direction;
     }
 }

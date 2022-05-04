@@ -145,6 +145,34 @@ trait QueryTrait
     }
 
     /**
+     * Makes multiple "likes" via "OR" when value is array
+     *
+     * @param string           $column
+     * @param string|string[]  $value
+     * @param false|null|array $escapingReplacements
+     *
+     * @return $this
+     */
+    public function like(string $column, $value, $escapingReplacements = null): self
+    {
+        return $this->baseLike($column, $value, $escapingReplacements, '');
+    }
+
+    /**
+     * Makes multiple "ilikes" via "OR" when value is array
+     *
+     * @param string           $column
+     * @param string|string[]  $value
+     * @param false|null|array $escapingReplacements
+     *
+     * @return $this
+     */
+    public function iLike(string $column, $value, $escapingReplacements = null): self
+    {
+        return $this->baseLike($column, $value, $escapingReplacements, 'i');
+    }
+
+    /**
      * This "operator" method builds standard Yii2 binary operators.
      * Multiple values used to pass additional parameters,
      * for example in Yii2 query `like` operator: `['like', 'column', '%value%', false]`
@@ -157,11 +185,8 @@ trait QueryTrait
      */
     public function op(string $operator, string $column, ...$values): self
     {
-        $args    = \func_get_args();
-        $args[1] = $this->columnAlias($args[1]);
-        return $this->andOnWhere($args);
+        return $this->andOnWhere(\call_user_func_array([$this, 'opCondition'], \func_get_args()));
     }
-
 
     /**
      * Skipping `createCommand()`
@@ -188,6 +213,28 @@ trait QueryTrait
     public function countInt(string $q = '*', $db = null): int
     {
         return (int)$this->count($q, $db);
+    }
+
+    /**
+     * Analog `addOrderBy()` with deferred aliases
+     *
+     * @param array $columns
+     *
+     * @return $this
+     *
+     * @see \yii\db\QueryTrait::addOrderBy()
+     */
+    public function selectColumns(array $columns): self
+    {
+        $result = [];
+
+        foreach ($columns as $alias => $column) {
+            $result[$alias] = $this->columnAlias($column);
+        }
+
+        $this->addSelect($result);
+
+        return $this;
     }
 
     /**
@@ -238,29 +285,19 @@ trait QueryTrait
      * Wrapping column with alias expression
      *
      * @param string $column
-     * @param int    $direction
-     *
-     * @return DeferredOrderByAliasExpression
-     */
-    private function orderByAlias(string $column, int $direction): DeferredOrderByAliasExpression
-    {
-        return new DeferredOrderByAliasExpression('', [], [
-            'extendedQuery' => $this,
-            'column'        => $column,
-            'direction'     => $direction,
-        ]);
-    }
-
-    /**
-     * Wrapping column with alias expression
-     *
-     * @param string $column
      *
      * @return DeferredColumnAliasExpression
      */
     public function columnAlias(string $column): DeferredColumnAliasExpression
     {
-        return new DeferredColumnAliasExpression('', [], ['extendedQuery' => $this, 'column' => $column]);
+        return DeferredColumnAliasExpression::make($this, $column);
+    }
+
+    final protected function opCondition(string $operator, string $column, ...$values): array
+    {
+        $args    = \func_get_args();
+        $args[1] = $this->columnAlias($args[1]);
+        return $args;
     }
 
     /**
@@ -279,4 +316,42 @@ trait QueryTrait
      * @return mixed
      */
     abstract protected function getTableNameAndAlias();
+
+    /**
+     * Makes multiple "likes", "ilikes" or whatever via "OR" when value is array
+     *
+     * @param string           $column
+     * @param string|string[]  $value
+     * @param false|null|array $escapingReplacements
+     * @param string           $prefix
+     *
+     * @return $this
+     */
+    private function baseLike(string $column, $value, $escapingReplacements, string $prefix): self
+    {
+        if (!\is_array($value)) {
+            $value = [$value];
+        }
+
+        $this->andOnWhere($this->opCondition('or ' . $prefix . 'like', $column, $value, $escapingReplacements));
+
+        return $this;
+    }
+
+    /**
+     * Wrapping column with alias expression
+     *
+     * @param string $column
+     * @param int    $direction
+     *
+     * @return DeferredOrderByAliasExpression
+     */
+    private function orderByAlias(string $column, int $direction): DeferredOrderByAliasExpression
+    {
+        return new DeferredOrderByAliasExpression('', [], [
+            'extendedQuery' => $this,
+            'column'        => $column,
+            'direction'     => $direction,
+        ]);
+    }
 }

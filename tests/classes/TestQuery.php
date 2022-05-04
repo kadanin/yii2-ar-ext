@@ -14,12 +14,13 @@ use Kadanin\Yii2ArExt\Db\ActiveQuery;
 class TestQuery extends ActiveQuery
 {
     /**
-     * @param int $id
+     * @param string|string[]  $text
+     * @param false|null|array $escapingReplacements
      *
      * @return $this
      */
-    public function byID(int $id): self
+    public function likeText($text, $escapingReplacements = null): self
     {
-        return $this->eq('id', $id);
+        return $this->like('text', $text, $escapingReplacements);
     }
 }

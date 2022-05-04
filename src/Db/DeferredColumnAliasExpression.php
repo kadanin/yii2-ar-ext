@@ -12,6 +12,11 @@ final class DeferredColumnAliasExpression extends Expression
     public ExtendedQueryInterface $extendedQuery;
     public string $column;
 
+    public static function make(ExtendedQueryInterface $extendedQuery, string $column): self
+    {
+        return new self('', [], \compact('extendedQuery', 'column'));
+    }
+
     /**
      * String magic method.
      * @return string the DB expression.
