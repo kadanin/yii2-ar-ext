@@ -14,7 +14,30 @@ class ActiveQuery extends \yii\db\ActiveQuery implements ExtendedQueryInterface
 {
     use QueryTrait;
 
+    protected function getTableNameAndAlias(): array
+    {
+        if (empty($this->from)) {
+            $tableName = $this->getPrimaryTableName();
+        } else {
+            $tableName = '';
+            // if the first entry in "from" is an alias-tablename-pair return it directly
+            foreach ($this->from as $alias => $tableName) {
+                if (\is_string($alias)) {
+                    return [$tableName, $alias];
+                }
+                break;
+            }
+        }
 
+        if (\preg_match('/^(.*?)\s+({{\w+}}|\w+)$/', $tableName, $matches)) {
+            // $tableName = $matches[1];
+            $alias     = $matches[2];
+        } else {
+            $alias = $tableName;
+        }
+
+        return [$tableName, $alias];
+    }
     /**
      * @inheritDoc
      */

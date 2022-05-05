@@ -3,6 +3,7 @@
 namespace Kadanin\Yii2ArExt\Db;
 
 use yii\db\Connection;
+use yii\db\QueryBuilder;
 
 /**
  * The trait allows you to use operators
@@ -353,5 +354,20 @@ trait QueryTrait
             'column'        => $column,
             'direction'     => $direction,
         ]);
+    }
+
+    /**
+     * @param QueryBuilder $builder
+     * @return $this|\yii\db\Query a prepared query instance which will be used by [[QueryBuilder]] to build the SQL
+     */
+    public function prepare($builder)
+    {
+        $query = parent::prepare($builder);
+
+        [$tableName, $alias] = $this->getTableNameAndAlias();
+
+        echo "\n";\var_dump($tableName, $alias);
+
+        return $query;
     }
 }

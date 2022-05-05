@@ -10,6 +10,10 @@ class MainTest extends TestCase
     public function testMain(): void
     {
         static::assertEquals(
+            'SELECT * FROM `test` `f`',
+            Test::find()->from('test t')->alias('f')->rawSql()
+        );
+        static::assertEquals(
             'SELECT * FROM `test` `t` GROUP BY `t`.`id` ORDER BY `t`.`text` DESC',
             Test::find()->alias('a')->order(['text' => \SORT_DESC])->group(['id'])->alias('t')->rawSql()
         );

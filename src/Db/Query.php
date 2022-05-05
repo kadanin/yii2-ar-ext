@@ -35,7 +35,8 @@ class Query extends \yii\db\Query implements ExtendedQueryInterface
         }
 
         if (\preg_match('/^(.*?)\s+({{\w+}}|\w+)$/', $tableName, $matches)) {
-            $alias = $matches[2];
+            $tableName = $matches[1];
+            $alias     = $matches[2];
         } else {
             $alias = $tableName;
         }
