@@ -3,7 +3,6 @@
 namespace Kadanin\Yii2ArExt\Db;
 
 use yii\db\Connection;
-use yii\db\QueryBuilder;
 
 /**
  * The trait allows you to use operators

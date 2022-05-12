@@ -38,12 +38,13 @@ class ActiveQuery extends \yii\db\ActiveQuery implements ExtendedQueryInterface
 
         return [$tableName, $alias];
     }
+
     /**
      * @inheritDoc
      */
     public function orOnCondition($condition, $params = []): self
     {
-        if ($this->on === null) {
+        if (null === $this->on) {
             $this->on = $condition;
         } elseif (\is_array($this->on) && (0 === \strcasecmp($this->on[0] ?? '', 'or'))) {
             $this->on[] = $condition;
@@ -59,7 +60,7 @@ class ActiveQuery extends \yii\db\ActiveQuery implements ExtendedQueryInterface
      */
     public function andOnCondition($condition, $params = []): self
     {
-        if ($this->on === null) {
+        if (null === $this->on) {
             $this->on = $condition;
         } elseif (\is_array($this->on) && (0 === \strcasecmp($this->on[0] ?? '', 'and'))) {
             $this->on[] = $condition;
