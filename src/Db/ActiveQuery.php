@@ -30,7 +30,7 @@ class ActiveQuery extends \yii\db\ActiveQuery implements ExtendedQueryInterface
         }
 
         if (\preg_match('/^(.*?)\s+({{\w+}}|\w+)$/', $tableName, $matches)) {
-            // $tableName = $matches[1];
+            $tableName = $matches[1];
             $alias     = $matches[2];
         } else {
             $alias = $tableName;
