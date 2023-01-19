@@ -4,9 +4,9 @@ use yii\console\Application;
 use yii\db\Connection;
 
 (new class {
-    public function run()
+    public function run(): void
     {
-        $root = dirname(__DIR__);
+        $root = \dirname(__DIR__);
 
         require $root . '/vendor/autoload.php';
         require $root . '/vendor/yiisoft/yii2/Yii.php';
