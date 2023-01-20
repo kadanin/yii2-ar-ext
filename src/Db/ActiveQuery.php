@@ -9,11 +9,17 @@ namespace Kadanin\Yii2ArExt\Db;
  * @method ActiveRecord[]    each($batchSize = 100, $db = null) Fake for IDE. Real result is [[BatchQueryResult]]
  *
  * @see \yii\db\BatchQueryResult
+ * @see \Kadanin\Yii2ArExt\Db\QueryTrait
  */
 class ActiveQuery extends \yii\db\ActiveQuery implements ExtendedQueryInterface
 {
     use QueryTrait;
 
+    /**
+     * @inheritDoc
+     *
+     * @return array
+     */
     protected function getTableNameAndAlias(): array
     {
         if (empty($this->from)) {
