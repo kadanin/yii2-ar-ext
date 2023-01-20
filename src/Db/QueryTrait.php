@@ -216,7 +216,7 @@ trait QueryTrait
     }
 
     /**
-     * Analog `addOrderBy()` with deferred aliases
+     * Analog `addSelect()` with deferred aliases
      *
      * @param array $columns
      *
