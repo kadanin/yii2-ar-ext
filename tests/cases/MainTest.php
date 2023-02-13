@@ -33,7 +33,12 @@ class MainTest extends TestCase
             'SELECT `t`.`text` AS `txt` FROM `test` `t` GROUP BY `t`.`text` ORDER BY `t`.`text` DESC',
             Test::find()->alias('a')->selectColumns(['txt' => 'text'])->order(['text' => \SORT_DESC])->group(['text'])->alias('t')->rawSql()
         );
-        static::assertEquals(['id' => 1, 'text' => 'text1'], Test::find()->orderBy(['id' => \SORT_ASC])->asArray()->alone());
-        static::assertEquals([['id' => 2, 'text' => 'text2']], Test::find()->likeText(2)->asArray()->all());
+    }
+
+    public function testError(): void
+    {
+        static::assertEquals(['id' => 1, 'text' => 'text1', 'key' => 'key1'], Test::find()->eq('key', 'key1')->one()->toArray());
+        static::assertEquals(['id' => 1, 'text' => 'text1', 'key' => 'key1'], Test::find()->orderBy(['id' => \SORT_ASC])->asArray()->alone());
+        static::assertEquals([['id' => 2, 'text' => 'text2', 'key' => 'key2']], Test::find()->likeText(2)->asArray()->all());
     }
 }
